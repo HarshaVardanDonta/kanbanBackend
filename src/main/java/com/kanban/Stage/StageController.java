@@ -3,6 +3,8 @@ package com.kanban.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.kanban.Card.CardRepo;
+
 import java.util.List;
 
 @RestController
@@ -13,12 +15,12 @@ public class StageController {
     @Autowired
     private StageRepo stageRepository;
 
-    @GetMapping
-    public List<Stage> getStages() {
-        // Fetch all stages
-        List<Stage> stages = stageRepository.findAll();
+    @Autowired
+    private CardRepo cardRepo;
 
-        return stages; // No circular reference now, as @JsonIgnore is used
+    @GetMapping
+    public List<Stage> getAllStagesWithCards() {
+        return stageRepository.findAll(); // This will include cards if the relationship is set properly
     }
 
     @PostMapping
