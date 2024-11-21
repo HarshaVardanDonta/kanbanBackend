@@ -1,13 +1,20 @@
 package com.kanban.Card;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.kanban.Stage.StageRepo;
+import com.kanban.User.User;
+import com.kanban.User.UserRepository;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,8 +30,17 @@ public class CardController {
     @Autowired
     private CardRepo cardRepo;
 
+    @Autowired
+    private UserRepository userRepo;
+
     @PostMapping
-    public Card createCard(@RequestBody Card card) {
+    public Card createCard(@RequestBody Card card, @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        User user = userRepo.findByUsername(username); // Fetch the logged-in user
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+        }
+        card.setUser(user); // Assign the user to the card
         return cardRepo.save(card);
     }
 

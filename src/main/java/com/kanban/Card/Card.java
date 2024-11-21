@@ -2,8 +2,10 @@ package com.kanban.Card;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.kanban.Stage.Stage;
+import com.kanban.User.User;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,6 +26,10 @@ public class Card {
     @JoinColumn(name = "stage_id")
     @JsonBackReference
     private Stage stage;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     // getters and setters
 
@@ -57,6 +63,14 @@ public class Card {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

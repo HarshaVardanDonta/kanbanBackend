@@ -7,4 +7,5 @@ import java.util.List;
 
 @Repository
 public interface StageRepo extends JpaRepository<Stage, Long> {
+    List<Stage> findByUserId(Long userId);
 }

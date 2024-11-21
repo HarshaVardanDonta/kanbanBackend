@@ -1,5 +1,9 @@
 package com.kanban.User;
 
+import java.util.List;
+
+import com.kanban.Stage.Stage;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +18,9 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Stage> stages;
 
     // Default constructor
     public User() {
