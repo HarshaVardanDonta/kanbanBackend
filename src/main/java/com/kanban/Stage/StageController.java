@@ -54,4 +54,21 @@ public class StageController {
     public void deleteStage(@PathVariable Long id) {
         stageRepository.deleteById(id);
     }
+
+    @PutMapping("/updateStage")
+    public Stage updateStage(@RequestBody Stage exStage, @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        User user = userRepo.findByUsername(username); // Get the logged-in user
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+        }
+        Stage stage = stageRepository.findById(exStage.getId()).orElse(null);
+        if (stage == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Stage not found");
+        }
+
+        stage.setName(exStage.getName());
+        return stageRepository.save(stage);
+
+    }
 }

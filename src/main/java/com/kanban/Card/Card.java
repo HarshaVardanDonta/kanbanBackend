@@ -45,7 +45,7 @@ public class Card {
         return title;
     }
 
-    public void setTitle() {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -53,7 +53,7 @@ public class Card {
         return description;
     }
 
-    public void setDesctiption() {
+    public void setDesctiption(String description) {
         this.description = description;
     }
 

@@ -59,4 +59,24 @@ public class CardController {
         return card;
     }
 
+    @PutMapping("/updateCard")
+    public Card updateCardDetails(@RequestBody Card exCard, @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        User user = userRepo.findByUsername(username); // Fetch the logged-in user
+
+        Card card = cardRepo.findById(exCard.getId()).orElse(null);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+        }
+        if (card != null) {
+            card.setTitle(exCard.getTitle());
+            card.setDesctiption(exCard.getDescription());
+            card.setUser(user);
+            return cardRepo.save(card);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
 }
